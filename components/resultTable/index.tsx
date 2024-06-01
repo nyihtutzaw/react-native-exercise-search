@@ -1,37 +1,21 @@
 import { FlatList, HStack, Text, VStack } from "@gluestack-ui/themed"
+import { Item } from "./item";
+import { UserData } from "../../data/leaderboard";
 
 
-const dummyData: { id: number, text: string }[] = [
-    {
-        id: 1,
-        text: "ABC"
-    },
-    {
-        id: 2,
-        text: "ABCD"
-    },
-]
-
-
-
-export const ResultTable = () => {
+export const ResultTable = ({ data, searchData }: { data: UserData[], searchData: UserData[] }) => {
     return (
         <VStack w={'$full'} padding={10}>
             <HStack justifyContent="space-between" borderBottomWidth={1} padding={10} borderColor="$primary200" bgColor='$primary500'>
-                <Text fontWeight="bold" textAlign="center" color="$white">Name</Text>
-                <Text fontWeight="bold" textAlign="center" color="$white">Rank</Text>
-                <Text fontWeight="bold" textAlign="center" color="$white">Bananas</Text>
-                <Text fontWeight="bold" textAlign="center" color="$white">isSearchedUser</Text>
+                <Text width={"45%"} fontWeight="bold" color="$white">Name</Text>
+                <Text width={"15%"} fontWeight="bold" color="$white">Rank</Text>
+                <Text width={"20%"} fontWeight="bold" color="$white">Bananas</Text>
+                <Text width={"20%"} fontWeight="bold" color="$white">Searched</Text>
             </HStack>
             <FlatList
-                data={dummyData}
-                renderItem={({ item, index }) => <HStack justifyContent="space-between" borderBottomWidth={1} padding={10} >
-                    <Text fontWeight="bold" textAlign="center">Name</Text>
-                    <Text fontWeight="bold" textAlign="center" bgColor="$primary">Rank</Text>
-                    <Text fontWeight="bold" textAlign="center" bgColor="$primary">Bananas</Text>
-                    <Text fontWeight="bold" textAlign="center" bgColor="$primary">isSearchedUser</Text>
-                </HStack>}
-                keyExtractor={(item) => item.id}
+                data={data}
+                renderItem={({ item, index }) => <Item eachUserData={item as UserData} index={index} isSearchedUser={searchData.find((eachData) => eachData.uid === (item as UserData).uid)?true:false} isEvenRow={index % 2 === 0} />}
+                keyExtractor={(item) => (item as UserData).uid}
             />
         </VStack>
     )
